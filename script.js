@@ -100,7 +100,10 @@ function init() {
   }
 
   function eval() {
-    if (opsChar.includes(input.innerHTML.slice(-1))) {
+    if (
+      opsChar.includes(input.innerHTML.slice(-1)) ||
+      input.innerHTML.slice(-1) === "."
+    ) {
       input.innerHTML = input.innerHTML;
     } else {
       var operation = (" " + input.innerHTML).slice(1);
