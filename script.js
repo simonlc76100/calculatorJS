@@ -1,7 +1,6 @@
 function init() {
   var input = document.querySelector(".result");
   var operationDisplay = document.querySelector(".operation");
-  var operation = "";
 
   var numbers = document.querySelectorAll(".number");
 
@@ -25,10 +24,12 @@ function init() {
   function clearFn() {
     input.innerHTML = "0";
     operationDisplay.innerHTML = "";
+    checkOp = undefined;
   }
 
   function clearEntryFn() {
     input.innerHTML = "0";
+    checkOp = undefined;
   }
 
   var backspace = document.querySelector("#backspace");
@@ -40,7 +41,10 @@ function init() {
       input.innerHTML = "0";
     } else {
       if (input.innerHTML.length > 1) {
-        input.innerHTML = input.innerHTML.substring(0, input.innerHTML.length - 1);
+        input.innerHTML = input.innerHTML.substring(
+          0,
+          input.innerHTML.length - 1
+        );
       } else {
         input.innerHTML = "0";
       }
@@ -55,44 +59,42 @@ function init() {
 
   var ops = [divide, multiply, minus, plus, comma, sign];
   var opsChar = ["÷", "×", "-", "+"];
-  var checkOp = false;
-  var first = false;
-  //
+  var checkOp;
 
   for (var i = 0; i < ops.length; i++) {
     ops[i].addEventListener("click", addOp);
   }
 
   function addOp(e) {
-    var check = false;
+    var checkComma = false;
+    console.log(typeof checkOp);
 
     if (e.target.innerHTML === ",") {
-      console.log("slip");
-      check = true;
+      checkComma = true;
     }
-
-    if (check) {
-      if (input.innerHTML.length === 1) {
-        input.innerHTML += ".";
-      }
-      if (input.innerHTML.length >= 1 && first === false) {
-        input.innerHTML += ".";
-        first = true;
-      } else if (input.innerHTML.slice(-1) === "." || opsChar.includes(input.innerHTML.slice(-1))) {
+    if (checkComma) {
+      if (input.innerHTML.slice(-1) === ".") {
+        input.innerHTML += "";
+      } else if (opsChar.includes(input.innerHTML.slice(-1))) {
         input.innerHTML = input.innerHTML;
-      } else if (opsChar.some((op) => input.innerHTML.includes(op)) && checkOp === false) {
-        console.log("test");
+      } else if (checkOp === true) {
         input.innerHTML += ".";
-        checkOp = true;
+        checkOp = false;
+      } else if (typeof checkOp === "undefined") {
+        input.innerHTML += ".";
+        checkOp = false;
       }
     } else {
       if (input.innerHTML === "0") {
         input.innerHTML = input.innerHTML;
-      } else if (opsChar.includes(input.innerHTML.slice(-1)) || input.innerHTML.slice(-1) === ".") {
+      } else if (
+        opsChar.includes(input.innerHTML.slice(-1)) ||
+        input.innerHTML.slice(-1) === "."
+      ) {
         input.innerHTML = input.innerHTML;
       } else {
         input.innerHTML += e.target.innerHTML;
-        checkOp = false;
+        checkOp = true;
       }
     }
   }
@@ -101,7 +103,7 @@ function init() {
     if (opsChar.includes(input.innerHTML.slice(-1))) {
       input.innerHTML = input.innerHTML;
     } else {
-      operation = (" " + input.innerHTML).slice(1);
+      var operation = (" " + input.innerHTML).slice(1);
       var splitNum = saveNum(operation, opsChar);
       console.log(splitNum);
 
