@@ -186,8 +186,8 @@ function init() {
           arrayOp.splice(i, 1);
           i--;
         }
-        check = false;
       }
+      check = false;
     }
     if (check === false) {
       result = array[0];
