@@ -171,6 +171,7 @@ function init() {
     for (var i = 0; i < arrayOp.length; i++) {
       if (arrayOp[i] === "÷" || arrayOp[i] === "×") {
         check = true;
+        break;
       }
     }
 
