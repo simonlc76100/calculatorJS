@@ -24,12 +24,14 @@ function init() {
   function clearFn() {
     input.innerHTML = "0";
     operationDisplay.innerHTML = "";
-    checkOp = undefined;
+    checkOp = false;
+    first = false;
   }
 
   function clearEntryFn() {
     input.innerHTML = "0";
-    checkOp = undefined;
+    checkOp = false;
+    first = false;
   }
 
   var backspace = document.querySelector("#backspace");
@@ -59,7 +61,8 @@ function init() {
 
   var ops = [divide, multiply, minus, plus, comma, sign];
   var opsChar = ["÷", "×", "-", "+"];
-  var checkOp;
+  var checkOp = false;
+  var first = false;
 
   for (var i = 0; i < ops.length; i++) {
     ops[i].addEventListener("click", addOp);
@@ -67,22 +70,24 @@ function init() {
 
   function addOp(e) {
     var checkComma = false;
-    console.log(typeof checkOp);
 
     if (e.target.innerHTML === ",") {
       checkComma = true;
     }
-    if (checkComma) {
+
+    if (checkComma === true) {
       if (input.innerHTML.slice(-1) === ".") {
         input.innerHTML += "";
       } else if (opsChar.includes(input.innerHTML.slice(-1))) {
         input.innerHTML = input.innerHTML;
+      } else if (checkOp === false && first === true) {
+        input.innerHTML = input.innerHTML;
       } else if (checkOp === true) {
         input.innerHTML += ".";
         checkOp = false;
-      } else if (typeof checkOp === "undefined") {
+      } else if (first === false && checkOp === false) {
         input.innerHTML += ".";
-        checkOp = false;
+        first = true;
       }
     } else {
       if (input.innerHTML === "0") {
@@ -119,6 +124,7 @@ function init() {
       operationDisplay.innerHTML = input.innerHTML + " =";
       operation = calculOp(splitNum, arrayOp);
       input.innerHTML = operation;
+      checkOp = false;
     }
   }
 
@@ -166,10 +172,18 @@ function init() {
     return array2;
   }
 
+  function updateArray(array1, array2, index, value) {
+    array1.splice(index, 1);
+    array1.splice(index, 1, value);
+    array2.splice(index, 1);
+  }
+
   function calculOp(array, arrayOp) {
     var result = 0;
     var temp = 0;
     var check = false;
+
+    console.log("processing");
 
     for (var i = 0; i < arrayOp.length; i++) {
       if (arrayOp[i] === "÷" || arrayOp[i] === "×") {
@@ -179,36 +193,54 @@ function init() {
     }
 
     if (check === true) {
-      for (i = 0; i < array.length; i++) {
-        if (arrayOp[i] === "×" || arrayOp[i] === "÷") {
-          if (arrayOp[i] === "×") {
-            temp = array[i] * array[i + 1];
-          }
-          if (arrayOp[i] === "÷") {
+      for (i = 0; i < array.length - 1; i++) {
+        switch (arrayOp[i]) {
+          case "÷":
             temp = array[i] / array[i + 1];
-          }
-          array.splice(i, 1);
-          array.splice(i, 1, temp);
-          arrayOp.splice(i, 1);
-          i--;
+            updateArray(array, arrayOp, i, temp);
+            i--;
+            console.log(array);
+            console.log(arrayOp);
+            break;
+          case "×":
+            temp = array[i] * array[i + 1];
+            updateArray(array, arrayOp, i, temp);
+            i--;
+            console.log(array);
+            console.log(arrayOp);
+            break;
         }
       }
       check = false;
     }
     if (check === false) {
-      result = array[0];
-      for (i = 1; i < array.length; i++) {
-        switch (arrayOp[i - 1]) {
+      for (i = 0; i < array.length - 1; i++) {
+        switch (arrayOp[i]) {
           case "-":
-            result -= array[i];
+            temp = array[i] - array[i + 1];
+            updateArray(array, arrayOp, i, temp);
+            i--;
+            console.log(array);
+            console.log(arrayOp);
             break;
           case "+":
-            result += array[i];
+            temp = array[i] + array[i + 1];
+            updateArray(array, arrayOp, i, temp);
+            i--;
+            console.log(array);
+            console.log(arrayOp);
             break;
         }
       }
     }
-    return (result = +result.toFixed(4));
+    console.log(array[0]);
+    if (Number.isInteger(array[0])) {
+      result = array[0];
+    } else {
+      result = array[0].toFixed(12);
+    }
+    console.log(result);
+    return result;
   }
 
   var equal = document.querySelector("#equal");

@@ -1,95 +1,99 @@
 html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Roboto', sans-serif;
-    background-color: rgb(42, 42, 42);
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Roboto", sans-serif;
+  background-color: rgb(42, 42, 42);
 }
 
-.container{
-    border : 3px solid #1F1F1F;
+.container {
+  border: 3px solid #1f1f1f;
 }
 
-.display{
-    position: relative;
-    width:320px;
-    height: 120px;
-    background-color: #1F1F1F;
-    color: white;
-    overflow-x: hidden;
+.display {
+  position: relative;
+  width: 320px;
+  height: 120px;
+  background-color: #1f1f1f;
+  color: white;
+  overflow-x: hidden;
 }
 
-.result{
-    position: absolute;
-    right: 0px;
-    bottom: 0px;
-    padding : 10px;
-    font-size: 40px;
+.result {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  padding: 10px;
+  font-size: 40px;
 }
 
-.operation{
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    padding : 10px;
-    font-size: 20px;
+.operation {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  padding: 10px;
+  font-size: 20px;
 }
 
-
-.buttons{
-    width: 320px;
-    height: 360px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+.buttons {
+  width: 320px;
+  height: 360px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
 }
 
-button{
-    width: 80px;
-    height: 60px;
-    border : 1px solid #1F1F1F;
-    background-color: #060606;
-    color: white;
+button {
+  width: 80px;
+  height: 60px;
+  border: 1px solid #1f1f1f;
+  background-color: #060606;
+  color: white;
 }
 
-button:hover{
-    background-color: #484848;
+button:hover {
+  background-color: #484848;
 }
 
-button:active{
-    background-color: #626262;
+button:active {
+  background-color: #626262;
 }
 
-.number{
-    font-size: 18px;
-    font-weight: bold;
+.number {
+  font-size: 18px;
+  font-weight: bold;
 }
 
-.sign, .comma{
-    font-size: 18px;
-    font-weight: bold;
+.sign,
+.comma {
+  font-size: 18px;
+  font-weight: bold;
 }
 
-.op{
-    background-color: #131313;
-    font-size: 16px;
+.op {
+  background-color: #131313;
+  font-size: 16px;
 }
 
-#minus, #plus, #divide, #multiply, #equal{
-    font-size: 25px;
+#minus,
+#plus,
+#divide,
+#multiply,
+#equal {
+  font-size: 25px;
 }
 
-#equal{
-    background-color: #194419;
+#equal {
+  background-color: #194419;
 }
 
-#equal:hover{
-    background-color: #117211;
+#equal:hover {
+  background-color: #117211;
 }
 
-#equal:active{
-    background-color: #148b14;
+#equal:active {
+  background-color: #148b14;
 }
