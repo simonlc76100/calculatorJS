@@ -61,6 +61,7 @@ function init() {
 
   var ops = [divide, multiply, minus, plus, comma, sign];
   var opsChar = ["÷", "×", "-", "+"];
+  var opsCharPrior = ["÷", "×"];
   var checkOp = false;
   var first = false;
 
@@ -185,11 +186,8 @@ function init() {
 
     console.log("processing");
 
-    for (var i = 0; i < arrayOp.length; i++) {
-      if (arrayOp[i] === "÷" || arrayOp[i] === "×") {
-        check = true;
-        break;
-      }
+    if (opsCharPrior.some((elem) => input.innerHTML.includes(elem))) {
+      check = true;
     }
 
     if (check === true) {
