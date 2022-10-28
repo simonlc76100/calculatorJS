@@ -275,7 +275,7 @@ function init() {
     if (Number.isInteger(array[0])) {
       result = array[0];
     } else {
-      result = array[0];
+      result = parseFloat(array[0].toFixed(12));
     }
     console.log(result);
     return result;
