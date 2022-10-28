@@ -1,72 +1,51 @@
 function init() {
+  //variables
+
   var input = document.querySelector(".result");
   var operationDisplay = document.querySelector(".operation");
-
   var numbers = document.querySelectorAll(".number");
-
-  for (var i = 0; i < numbers.length; i++) {
-    numbers[i].addEventListener("click", addNumber);
-  }
-  function addNumber(e) {
-    if (input.innerHTML === "0") {
-      input.innerHTML = e.target.innerHTML;
-    } else {
-      input.innerHTML += e.target.innerHTML;
-    }
-  }
-
   var clear = document.querySelector("#clear");
   var clearEntry = document.querySelector("#clearEntry");
-
-  clear.addEventListener("click", clearFn);
-  clearEntry.addEventListener("click", clearEntryFn);
-
-  function clearFn() {
-    input.innerHTML = "0";
-    operationDisplay.innerHTML = "";
-    checkOp = false;
-    first = false;
-  }
-
-  function clearEntryFn() {
-    input.innerHTML = "0";
-    checkOp = false;
-    first = false;
-  }
-
   var backspace = document.querySelector("#backspace");
-
-  backspace.addEventListener("click", backspaceFn);
-
-  function backspaceFn() {
-    if (input.innerHTML === "0") {
-      input.innerHTML = "0";
-    } else {
-      if (input.innerHTML.length > 1) {
-        input.innerHTML = input.innerHTML.substring(
-          0,
-          input.innerHTML.length - 1
-        );
-      } else {
-        input.innerHTML = "0";
-      }
-    }
-  }
   var divide = document.querySelector("#divide");
   var multiply = document.querySelector("#multiply");
   var minus = document.querySelector("#minus");
   var plus = document.querySelector("#plus");
   var comma = document.querySelector(".comma");
   var sign = document.querySelector(".sign");
-
-  var ops = [divide, multiply, minus, plus, comma, sign];
+  var equal = document.querySelector("#equal");
+  var operation;
+  var previousOp;
+  var splitNum;
+  var arrayOp;
+  var ops = [divide, multiply, minus, plus, comma];
   var opsChar = ["÷", "×", "-", "+"];
   var opsCharPrior = ["÷", "×"];
   var checkOp = false;
   var first = false;
 
+  //event listeners
+
+  for (var i = 0; i < numbers.length; i++) {
+    numbers[i].addEventListener("click", addNumber);
+  }
+  clear.addEventListener("click", clearFn);
+  clearEntry.addEventListener("click", clearEntryFn);
+  backspace.addEventListener("click", backspaceFn);
   for (var i = 0; i < ops.length; i++) {
     ops[i].addEventListener("click", addOp);
+  }
+  sign.addEventListener("click", addSign);
+  equal.addEventListener("click", displayResult);
+
+  //input functions
+
+  function addNumber(e) {
+    if (input.innerHTML === "0") {
+      input.innerHTML = e.target.innerHTML;
+    } else {
+      input.innerHTML += e.target.innerHTML;
+    }
   }
 
   function addOp(e) {
@@ -105,41 +84,83 @@ function init() {
     }
   }
 
-  function eval() {
-    if (
-      opsChar.includes(input.innerHTML.slice(-1)) ||
-      input.innerHTML.slice(-1) === "."
-    ) {
-      input.innerHTML = input.innerHTML;
+  function addSign(e) {
+    if (parseFloat(input.innerHTML) > 0) {
+      input.innerHTML = "-" + input.innerHTML;
     } else {
-      var operation = (" " + input.innerHTML).slice(1);
-      var splitNum = saveNum(operation, opsChar);
-      console.log(splitNum);
-
-      var arrayOp = saveOp(operation, opsChar);
-      console.log(arrayOp);
-
-      splitNum = toNumber(splitNum);
-      console.log(splitNum);
-
-      operationDisplay.innerHTML = input.innerHTML + " =";
-      operation = calculOp(splitNum, arrayOp);
-      input.innerHTML = operation;
-      checkOp = false;
+      input.innerHTML = -parseFloat(input.innerHTML);
     }
   }
 
+  //clear functions
+
+  function clearFn() {
+    input.innerHTML = "0";
+    operationDisplay.innerHTML = "";
+    checkOp = false;
+    first = false;
+  }
+
+  function clearEntryFn() {
+    input.innerHTML = "0";
+    checkOp = false;
+    first = false;
+  }
+
+  function backspaceFn() {
+    if (input.innerHTML === "0") {
+      input.innerHTML = input.innerHTML;
+    } else if (
+      parseFloat(input.innerHTML) < 0 &&
+      input.innerHTML.length === 2
+    ) {
+      input.innerHTML = "0";
+    } else if (parseFloat(input.innerHTML) < 0 && input.innerHTML.length > 2) {
+      input.innerHTML = input.innerHTML.substring(
+        0,
+        input.innerHTML.length - 1
+      );
+    } else {
+      if (input.innerHTML.length > 1) {
+        input.innerHTML = input.innerHTML.substring(
+          0,
+          input.innerHTML.length - 1
+        );
+      } else {
+        input.innerHTML = "0";
+      }
+    }
+  }
+
+  //processing functions
+
   function saveNum(str, separators) {
     var tempChar = separators[0];
-    for (var i = 1; i < separators.length; i++) {
-      str = str.split(separators[i]).join(tempChar);
+    var first = 0;
+
+    if (str[0] === "-") {
+      first = parseFloat(str);
+      str = str.substring(1);
+      for (var i = 1; i < separators.length; i++) {
+        str = str.split(separators[i]).join(tempChar);
+      }
+      str = str.split(tempChar);
+      str[0] = first.toString();
+    } else {
+      for (var i = 1; i < separators.length; i++) {
+        str = str.split(separators[i]).join(tempChar);
+      }
+      str = str.split(tempChar);
     }
-    str = str.split(tempChar);
     return str;
   }
 
   function saveOp(str, ops) {
     var array = [];
+
+    if (str[0] === "-") {
+      str = str.substring(1);
+    }
 
     for (var i = 0; i < str.length; i++) {
       if (ops.includes(str[i])) {
@@ -164,11 +185,30 @@ function init() {
     return array;
   }
 
+  function processOperation() {
+    operation = input.innerHTML;
+    console.log(operation);
+    splitNum = saveNum(operation, opsChar);
+    console.log(splitNum);
+
+    splitNum = toNumber(splitNum);
+    console.log(splitNum);
+
+    arrayOp = saveOp(operation, opsChar);
+    console.log(arrayOp);
+
+    operationDisplay.innerHTML = input.innerHTML + " =";
+    operation = calculOp(splitNum, arrayOp);
+    previousOp = operation;
+    input.innerHTML = operation;
+    checkOp = false;
+  }
+
   function toNumber(array1) {
     var array2 = [];
 
     for (var i = 0; i < array1.length; i++) {
-      array2.push(+array1[i]);
+      array2.push(parseFloat(array1[i]));
     }
     return array2;
   }
@@ -235,14 +275,40 @@ function init() {
     if (Number.isInteger(array[0])) {
       result = array[0];
     } else {
-      result = array[0].toFixed(12);
+      result = array[0];
     }
     console.log(result);
     return result;
   }
 
-  var equal = document.querySelector("#equal");
-  equal.addEventListener("click", eval);
+  function displayResult() {
+    if (operationDisplay.innerHTML === "") {
+      if (
+        checkOp === false ||
+        opsChar.some((elem) => input.innerHTML.includes(elem)) === false ||
+        opsChar.includes(input.innerHTML.slice(-1)) ||
+        input.innerHTML.slice(-1) === "."
+      ) {
+        input.innerHTML = input.innerHTML;
+      } else {
+        processOperation();
+      }
+    } else {
+      if (input.innerHTML === "0") {
+        input.innerHTML = previousOp;
+      } else {
+        if (
+          opsChar.some((elem) => input.innerHTML.includes(elem)) === false ||
+          opsChar.includes(input.innerHTML.slice(-1)) ||
+          input.innerHTML.slice(-1) === "."
+        ) {
+          input.innerHTML = input.innerHTML;
+        } else {
+          processOperation();
+        }
+      }
+    }
+  }
 }
 
 document.addEventListener("DOMContentLoaded", init);

@@ -28,7 +28,7 @@ html {
   right: 0px;
   bottom: 0px;
   padding: 10px;
-  font-size: 40px;
+  font-size: 45px;
 }
 
 .operation {
@@ -36,7 +36,7 @@ html {
   right: 0px;
   top: 0px;
   padding: 10px;
-  font-size: 20px;
+  font-size: 30px;
 }
 
 .buttons {
@@ -66,27 +66,27 @@ button:focus {
   outline: none;
 }
 .number {
-  font-size: 18px;
+  font-size: 25px;
   font-weight: bold;
 }
 
 .sign,
 .comma {
-  font-size: 18px;
+  font-size: 25px;
   font-weight: bold;
 }
 
 .op {
   background-color: #131313;
-  font-size: 16px;
+  font-size: 22px;
 }
 
-#minus,
-#plus,
 #divide,
 #multiply,
+#minus,
+#plus,
 #equal {
-  font-size: 25px;
+  font-size: 28px;
 }
 
 #equal {
