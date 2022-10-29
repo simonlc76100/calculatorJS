@@ -49,8 +49,6 @@ function init() {
   }
 
   function addOp(e) {
-    console.log("isComma: " + checkComma);
-    console.log("isOp: " + checkOp);
     var isComma = false;
     if (e.target.innerHTML === ",") {
       isComma = true;
@@ -107,8 +105,6 @@ function init() {
   }
 
   function backspaceFn() {
-    console.log("isComma: " + checkComma);
-    console.log("isOp: " + checkOp);
     if (input.innerHTML === "0") {
       input.innerHTML = input.innerHTML;
     } else if (
@@ -124,20 +120,17 @@ function init() {
     } else {
       if (input.innerHTML.length > 1) {
         if (input.innerHTML.slice(-1) === ".") {
-          console.log("test comma");
           input.innerHTML = input.innerHTML.substring(
             0,
             input.innerHTML.length - 1
           );
           checkComma = false;
         } else if (opsChar.includes(input.innerHTML.slice(-1))) {
-          console.log("test op");
           input.innerHTML = input.innerHTML.substring(
             0,
             input.innerHTML.length - 1
           );
           checkOp = false;
-          //checkComma = true;
         } else {
           input.innerHTML = input.innerHTML.substring(
             0,
@@ -155,6 +148,7 @@ function init() {
   function saveNum(str, separators) {
     var tempChar = separators[0];
     var first = 0;
+    var array = [];
 
     if (str[0] === "-") {
       first = parseFloat(str);
@@ -170,7 +164,11 @@ function init() {
       }
       str = str.split(tempChar);
     }
-    return str;
+
+    for (var i = 0; i < str.length; i++) {
+      array.push(parseFloat(str[i]));
+    }
+    return array;
   }
 
   function saveOp(str, ops) {
@@ -209,11 +207,8 @@ function init() {
     splitNum = saveNum(operation, opsChar);
     console.log("splitted numbers :" + splitNum);
 
-    splitNum = toNumber(splitNum);
-    console.log(splitNum);
-
     arrayOp = saveOp(operation, opsChar);
-    console.log(arrayOp);
+    console.log("splitted ops :" + arrayOp);
 
     operationDisplay.innerHTML = input.innerHTML + " =";
     operation = calculOp(splitNum, arrayOp);
@@ -221,16 +216,10 @@ function init() {
     input.innerHTML = operation;
   }
 
-  function toNumber(array1) {
-    var array2 = [];
-
-    for (var i = 0; i < array1.length; i++) {
-      array2.push(parseFloat(array1[i]));
-    }
-    return array2;
-  }
-
-  function updateArray(array1, array2, index, value) {
+  function updateArray(array1, array2, index, value, count) {
+    console.log("step " + count);
+    console.log(array1);
+    console.log(array2);
     array1.splice(index, 1);
     array1.splice(index, 1, value);
     array2.splice(index, 1);
@@ -240,6 +229,7 @@ function init() {
     var result = 0;
     var temp = 0;
     var check = false;
+    var count = 0;
 
     console.log("processing");
 
@@ -251,18 +241,16 @@ function init() {
       for (i = 0; i < array.length - 1; i++) {
         switch (arrayOp[i]) {
           case "÷":
+            count++;
             temp = array[i] / array[i + 1];
-            updateArray(array, arrayOp, i, temp);
+            updateArray(array, arrayOp, i, temp, count);
             i--;
-            console.log(array);
-            console.log(arrayOp);
             break;
           case "×":
+            count++;
             temp = array[i] * array[i + 1];
-            updateArray(array, arrayOp, i, temp);
+            updateArray(array, arrayOp, i, temp, count);
             i--;
-            console.log(array);
-            console.log(arrayOp);
             break;
         }
       }
@@ -272,23 +260,20 @@ function init() {
       for (i = 0; i < array.length - 1; i++) {
         switch (arrayOp[i]) {
           case "-":
+            count++;
             temp = array[i] - array[i + 1];
-            updateArray(array, arrayOp, i, temp);
+            updateArray(array, arrayOp, i, temp, count);
             i--;
-            console.log(array);
-            console.log(arrayOp);
             break;
           case "+":
+            count++;
             temp = array[i] + array[i + 1];
-            updateArray(array, arrayOp, i, temp);
+            updateArray(array, arrayOp, i, temp, count);
             i--;
-            console.log(array);
-            console.log(arrayOp);
             break;
         }
       }
     }
-    console.log(array[0]);
     if (Number.isInteger(array[0])) {
       result = array[0];
       checkOp = false;
@@ -298,7 +283,7 @@ function init() {
       checkOp = false;
       checkComma = true;
     }
-    console.log(result);
+    console.log("final result: " + result);
 
     return result;
   }
