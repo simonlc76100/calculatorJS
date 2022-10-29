@@ -62,21 +62,10 @@ function init() {
       } else if (opsChar.includes(input.innerHTML.slice(-1))) {
         input.innerHTML = input.innerHTML;
       } else if (checkComma === false) {
-        if (checkOp === false) {
-          input.innerHTML += ".";
-          checkComma = true;
-        } else if (checkOp === true) {
-          input.innerHTML += ".";
-          checkComma = true;
-        }
+        input.innerHTML += ".";
+        checkComma = true;
       } else if (checkComma === true) {
-        if (checkOp === false) {
-          input.innerHTML = input.innerHTML;
-        } else if (checkOp === true) {
-          // input.innerHTML += ".";
-          // checkOp = false;
-          input.innerHTML = input.innerHTML;
-        }
+        input.innerHTML = input.innerHTML;
       }
     } else {
       if (input.innerHTML === "0") {
