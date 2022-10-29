@@ -14,14 +14,14 @@ function init() {
   var comma = document.querySelector(".comma");
   var sign = document.querySelector(".sign");
   var equal = document.querySelector("#equal");
+  var ops = [divide, multiply, minus, plus, comma];
+  var opsChar = ["÷", "×", "-", "+"];
+  var opsCharPrior = [opsChar[0], opsChar[1]];
   var operationStr = "";
   var operation = 0;
   var previousOp = 0;
   var splitNum = [];
   var arrayOp = [];
-  var ops = [divide, multiply, minus, plus, comma];
-  var opsChar = ["÷", "×", "-", "+"];
-  var opsCharPrior = [opsChar[0], opsChar[1]];
   var checkOp = false;
   var checkComma = false;
 
@@ -50,21 +50,23 @@ function init() {
   }
 
   function addOp(e) {
-    var isComma = false;
+    var isInputComma = false;
     if (e.target.innerHTML === ",") {
-      isComma = true;
+      isInputComma = true;
     }
 
-    if (isComma === true) {
+    if (isInputComma === true) {
       if (input.innerHTML.slice(-1) === ".") {
-        input.innerHTML += "";
+        input.innerHTML = input.innerHTML;
       } else if (opsChar.includes(input.innerHTML.slice(-1))) {
+        input.innerHTML = input.innerHTML;
+      } else if (checkComma === true) {
         input.innerHTML = input.innerHTML;
       } else if (checkComma === false) {
         input.innerHTML += ".";
         checkComma = true;
-      } else if (checkComma === true) {
-        input.innerHTML = input.innerHTML;
+        console.log("isOp? " + checkOp);
+        console.log("isCom? " + checkComma);
       }
     } else {
       if (input.innerHTML === "0") {
@@ -75,6 +77,8 @@ function init() {
         input.innerHTML += e.target.innerHTML;
         checkOp = true;
         checkComma = false;
+        console.log("isOp? " + checkOp);
+        console.log("isCom? " + checkComma);
       }
     }
   }
@@ -119,7 +123,7 @@ function init() {
           var reversed = input.innerHTML.split("").reverse().join("");
           console.log(reversed);
           var i = 0;
-          while (opsChar.includes(reversed[i]) === false) {
+          while (opsChar.includes(reversed[i]) === false && i < reversed.length) {
             if (reversed[i] === ".") {
               checkComma = true;
               break;
