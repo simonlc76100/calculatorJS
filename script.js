@@ -69,10 +69,7 @@ function init() {
     } else {
       if (input.innerHTML === "0") {
         input.innerHTML = input.innerHTML;
-      } else if (
-        opsChar.includes(input.innerHTML.slice(-1)) ||
-        input.innerHTML.slice(-1) === "."
-      ) {
+      } else if (opsChar.includes(input.innerHTML.slice(-1)) || input.innerHTML.slice(-1) === ".") {
         input.innerHTML = input.innerHTML;
       } else {
         input.innerHTML += e.target.innerHTML;
@@ -108,40 +105,39 @@ function init() {
   function backspaceFn() {
     if (input.innerHTML === "0") {
       input.innerHTML = input.innerHTML;
-    } else if (
-      parseFloat(input.innerHTML) < 0 &&
-      input.innerHTML.length === 2
-    ) {
+    } else if (parseFloat(input.innerHTML) < 0 && input.innerHTML.length === 2) {
       input.innerHTML = "0";
     } else if (parseFloat(input.innerHTML) < 0 && input.innerHTML.length > 2) {
-      input.innerHTML = input.innerHTML.substring(
-        0,
-        input.innerHTML.length - 1
-      );
+      input.innerHTML = input.innerHTML.substring(0, input.innerHTML.length - 1);
     } else {
       if (input.innerHTML.length > 1) {
         if (input.innerHTML.slice(-1) === ".") {
-          input.innerHTML = input.innerHTML.substring(
-            0,
-            input.innerHTML.length - 1
-          );
+          input.innerHTML = input.innerHTML.substring(0, input.innerHTML.length - 1);
           checkComma = false;
         } else if (opsChar.includes(input.innerHTML.slice(-1))) {
-          input.innerHTML = input.innerHTML.substring(
-            0,
-            input.innerHTML.length - 1
-          );
+          input.innerHTML = input.innerHTML.substring(0, input.innerHTML.length - 1);
+          var reversed = input.innerHTML.split("").reverse().join("");
+          console.log(reversed);
+          var i = 0;
+          while (opsChar.includes(reversed[i]) === false) {
+            if (reversed[i] === ".") {
+              checkComma = true;
+              break;
+            }
+            i++;
+          }
+
           checkOp = false;
+          console.log(checkOp);
         } else {
-          input.innerHTML = input.innerHTML.substring(
-            0,
-            input.innerHTML.length - 1
-          );
+          input.innerHTML = input.innerHTML.substring(0, input.innerHTML.length - 1);
         }
       } else {
         input.innerHTML = "0";
       }
     }
+    console.log("isOp? " + checkOp);
+    console.log("isCom? " + checkComma);
   }
 
   //processing functions
