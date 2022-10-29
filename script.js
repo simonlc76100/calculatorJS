@@ -71,8 +71,14 @@ function init() {
     } else {
       if (input.innerHTML === "0") {
         input.innerHTML = input.innerHTML;
-      } else if (opsChar.includes(input.innerHTML.slice(-1)) || input.innerHTML.slice(-1) === ".") {
+      } else if (input.innerHTML.slice(-1) === ".") {
         input.innerHTML = input.innerHTML;
+      } else if (opsChar.includes(input.innerHTML.slice(-1))) {
+        input.innerHTML = input.innerHTML.slice(0, -1) + e.target.innerHTML;
+        checkOp = true;
+        checkComma = false;
+        console.log("isOp? " + checkOp);
+        console.log("isCom? " + checkComma);
       } else {
         input.innerHTML += e.target.innerHTML;
         checkOp = true;
