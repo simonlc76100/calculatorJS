@@ -14,13 +14,14 @@ function init() {
   var comma = document.querySelector(".comma");
   var sign = document.querySelector(".sign");
   var equal = document.querySelector("#equal");
-  var operation;
-  var previousOp;
-  var splitNum;
-  var arrayOp;
+  var operationStr = "";
+  var operation = 0;
+  var previousOp = 0;
+  var splitNum = [];
+  var arrayOp = [];
   var ops = [divide, multiply, minus, plus, comma];
   var opsChar = ["÷", "×", "-", "+"];
-  var opsCharPrior = ["÷", "×"];
+  var opsCharPrior = [opsChar[0], opsChar[1]];
   var checkOp = false;
   var checkComma = false;
 
@@ -202,12 +203,12 @@ function init() {
   }
 
   function processOperation() {
-    operation = input.innerHTML;
-    console.log("user input: " + operation);
-    splitNum = saveNum(operation, opsChar);
+    operationStr = input.innerHTML;
+    console.log("user input: " + operationStr);
+    splitNum = saveNum(operationStr, opsChar);
     console.log("splitted numbers :" + splitNum);
 
-    arrayOp = saveOp(operation, opsChar);
+    arrayOp = saveOp(operationStr, opsChar);
     console.log("splitted ops :" + arrayOp);
 
     operationDisplay.innerHTML = input.innerHTML + " =";
