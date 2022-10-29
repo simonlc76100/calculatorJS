@@ -22,7 +22,7 @@ function init() {
   var opsChar = ["÷", "×", "-", "+"];
   var opsCharPrior = ["÷", "×"];
   var checkOp = false;
-  var first = false;
+  var checkComma = false;
 
   //event listeners
 
@@ -49,25 +49,34 @@ function init() {
   }
 
   function addOp(e) {
-    var checkComma = false;
-
+    console.log("isComma: " + checkComma);
+    console.log("isOp: " + checkOp);
+    var isComma = false;
     if (e.target.innerHTML === ",") {
-      checkComma = true;
+      isComma = true;
     }
 
-    if (checkComma === true) {
+    if (isComma === true) {
       if (input.innerHTML.slice(-1) === ".") {
         input.innerHTML += "";
       } else if (opsChar.includes(input.innerHTML.slice(-1))) {
         input.innerHTML = input.innerHTML;
-      } else if (checkOp === false && first === true) {
-        input.innerHTML = input.innerHTML;
-      } else if (checkOp === true) {
-        input.innerHTML += ".";
-        checkOp = false;
-      } else if (first === false && checkOp === false) {
-        input.innerHTML += ".";
-        first = true;
+      } else if (checkComma === false) {
+        if (checkOp === false) {
+          input.innerHTML += ".";
+          checkComma = true;
+        } else if (checkOp === true) {
+          input.innerHTML += ".";
+          checkComma = true;
+        }
+      } else if (checkComma === true) {
+        if (checkOp === false) {
+          input.innerHTML = input.innerHTML;
+        } else if (checkOp === true) {
+          // input.innerHTML += ".";
+          // checkOp = false;
+          input.innerHTML = input.innerHTML;
+        }
       }
     } else {
       if (input.innerHTML === "0") {
@@ -80,6 +89,7 @@ function init() {
       } else {
         input.innerHTML += e.target.innerHTML;
         checkOp = true;
+        checkComma = false;
       }
     }
   }
@@ -98,16 +108,18 @@ function init() {
     input.innerHTML = "0";
     operationDisplay.innerHTML = "";
     checkOp = false;
-    first = false;
+    checkComma = false;
   }
 
   function clearEntryFn() {
     input.innerHTML = "0";
     checkOp = false;
-    first = false;
+    checkComma = false;
   }
 
   function backspaceFn() {
+    console.log("isComma: " + checkComma);
+    console.log("isOp: " + checkOp);
     if (input.innerHTML === "0") {
       input.innerHTML = input.innerHTML;
     } else if (
@@ -122,10 +134,27 @@ function init() {
       );
     } else {
       if (input.innerHTML.length > 1) {
-        input.innerHTML = input.innerHTML.substring(
-          0,
-          input.innerHTML.length - 1
-        );
+        if (input.innerHTML.slice(-1) === ".") {
+          console.log("test comma");
+          input.innerHTML = input.innerHTML.substring(
+            0,
+            input.innerHTML.length - 1
+          );
+          checkComma = false;
+        } else if (opsChar.includes(input.innerHTML.slice(-1))) {
+          console.log("test op");
+          input.innerHTML = input.innerHTML.substring(
+            0,
+            input.innerHTML.length - 1
+          );
+          checkOp = false;
+          //checkComma = true;
+        } else {
+          input.innerHTML = input.innerHTML.substring(
+            0,
+            input.innerHTML.length - 1
+          );
+        }
       } else {
         input.innerHTML = "0";
       }
@@ -187,9 +216,9 @@ function init() {
 
   function processOperation() {
     operation = input.innerHTML;
-    console.log(operation);
+    console.log("user input: " + operation);
     splitNum = saveNum(operation, opsChar);
-    console.log(splitNum);
+    console.log("splitted numbers :" + splitNum);
 
     splitNum = toNumber(splitNum);
     console.log(splitNum);
@@ -201,7 +230,6 @@ function init() {
     operation = calculOp(splitNum, arrayOp);
     previousOp = operation;
     input.innerHTML = operation;
-    checkOp = false;
   }
 
   function toNumber(array1) {
@@ -274,17 +302,21 @@ function init() {
     console.log(array[0]);
     if (Number.isInteger(array[0])) {
       result = array[0];
+      checkOp = false;
+      checkComma = false;
     } else {
       result = parseFloat(array[0].toFixed(12));
+      checkOp = false;
+      checkComma = true;
     }
     console.log(result);
+
     return result;
   }
 
   function displayResult() {
     if (operationDisplay.innerHTML === "") {
       if (
-        checkOp === false ||
         opsChar.some((elem) => input.innerHTML.includes(elem)) === false ||
         opsChar.includes(input.innerHTML.slice(-1)) ||
         input.innerHTML.slice(-1) === "."
