@@ -73,6 +73,8 @@ function init() {
         input.innerHTML = input.innerHTML;
       } else if (input.innerHTML.slice(-1) === ".") {
         input.innerHTML = input.innerHTML;
+      } else if (checkComma === true && input.innerHTML.slice(-1) === "0") {
+        input.innerHTML = input.innerHTML;
       } else if (opsChar.includes(input.innerHTML.slice(-1))) {
         input.innerHTML = input.innerHTML.slice(0, -1) + e.target.innerHTML;
         checkOp = true;
