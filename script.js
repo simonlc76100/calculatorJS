@@ -91,11 +91,15 @@ function init() {
     }
   }
 
-  function addSign(e) {
-    if (parseFloat(input.innerHTML) > 0) {
-      input.innerHTML = "-" + input.innerHTML;
+  function addSign() {
+    if (opsChar.some((elem) => input.innerHTML.includes(elem)) && input.innerHTML[0] !== "-") {
+      input.innerHTML = input.innerHTML;
     } else {
-      input.innerHTML = -parseFloat(input.innerHTML);
+      if (parseFloat(input.innerHTML) > 0) {
+        input.innerHTML = "-" + input.innerHTML;
+      } else {
+        input.innerHTML = -parseFloat(input.innerHTML);
+      }
     }
   }
 
@@ -300,6 +304,7 @@ function init() {
   function displayResult() {
     if (operationDisplay.innerHTML === "") {
       if (
+        checkOp === false ||
         opsChar.some((elem) => input.innerHTML.includes(elem)) === false ||
         opsChar.includes(input.innerHTML.slice(-1)) ||
         input.innerHTML.slice(-1) === "."
