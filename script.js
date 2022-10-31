@@ -106,41 +106,35 @@ function clearEntryFn() {
 function backspaceFn() {
   if (input.innerText === "0") {
     input.innerText = input.innerText += "";
-  } else if (parseFloat(input.innerText) < 0 && input.innerText.length === 2) {
+  } else if ((parseFloat(input.innerText) < 0 && input.innerText.length === 2) || input.innerText.length <= 1) {
     input.innerText = "0";
-  } else if (parseFloat(input.innerText) < 0 && input.innerText.length > 2) {
+  } else if ((parseFloat(input.innerText) < 0 && input.innerText.length > 2) || input.innerText.length > 1) {
     if (input.innerText.slice(-1) === ".") {
       input.innerText = input.innerText.substring(0, input.innerText.length - 1);
       checkComma = false;
-    }
-    input.innerText = input.innerText.substring(0, input.innerText.length - 1);
-  } else {
-    if (input.innerText.length > 1) {
-      if (input.innerText.slice(-1) === ".") {
-        input.innerText = input.innerText.substring(0, input.innerText.length - 1);
-        checkComma = false;
-      } else if (opsChar.includes(input.innerText.slice(-1))) {
-        input.innerText = input.innerText.substring(0, input.innerText.length - 1);
-        let reversed = input.innerText.split("").reverse().join("");
-        console.log(reversed);
-        let i = 0;
-        while (opsChar.includes(reversed[i]) === false && i < reversed.length) {
-          if (reversed[i] === ".") {
-            checkComma = true;
-            break;
-          }
-          i++;
+    } else if (opsChar.includes(input.innerText.slice(-1))) {
+      console.log("ouga");
+      input.innerText = input.innerText.substring(0, input.innerText.length - 1);
+      let reversed = input.innerText.split("").reverse().join("");
+      console.log(reversed);
+      let i = 0;
+      while (opsChar.includes(reversed[i]) === false && i < reversed.length) {
+        if (reversed[i] === ".") {
+          checkComma = true;
+          break;
         }
-
-        checkOp = false;
-        console.log(checkOp);
-      } else {
-        input.innerText = input.innerText.substring(0, input.innerText.length - 1);
+        i++;
       }
+
+      checkOp = false;
+      console.log(checkOp);
     } else {
-      input.innerText = "0";
+      input.innerText = input.innerText.substring(0, input.innerText.length - 1);
     }
+  } else {
+    input.innerText = input.innerText.substring(0, input.innerText.length - 1);
   }
+
   console.log("isOp? " + checkOp);
   console.log("isCom? " + checkComma);
 }
