@@ -73,15 +73,23 @@ function addOp(e) {
   }
 }
 
+function toPlainString(num) {
+  return ("" + +num).replace(/(-?)(\d*)\.?(\d*)e([+-]\d+)/, function (a, b, c, d, e) {
+    return e < 0 ? b + "0." + Array(1 - e - c.length).join(0) + c + d : b + c + d + Array(e - d.length + 1).join(0);
+  });
+}
+
 function addSign() {
   if (opsChar.some((elem) => input.innerText.includes(elem)) && input.innerText[0] !== "-") {
     input.innerText += "";
   } else {
     if (parseFloat(input.innerText) > 0) {
-      input.innerText = "-" + input.innerText;
+      input.innerText = "-" + toPlainString(input.innerText);
       checkSign = true;
+    } else if (parseFloat(input.innerText) === 0) {
+      input.innerText += "";
     } else {
-      input.innerText = -parseFloat(input.innerText);
+      input.innerText = toPlainString(-parseFloat(input.innerText));
       checkSign = false;
     }
   }
@@ -275,7 +283,7 @@ function calculOp(array, arrayOp) {
     checkOp = false;
     checkComma = false;
   } else {
-    result = parseFloat(array[0].toFixed(12));
+    result = toPlainString(array[0]);
     checkOp = false;
     checkComma = true;
   }
